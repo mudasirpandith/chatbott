@@ -33,7 +33,7 @@ const Layout = (props: {
         onClose={onClose}
         returnFocusOnClose={false}
         onOverlayClick={onClose}
-        size="full"
+        size="md"
       >
         <DrawerContent>
           <SidebarContent newChat={props.newchat} onClose={onClose} />
@@ -57,7 +57,7 @@ const SidebarContent = ({ onClose, newChat, ...rest }: SidebarProps) => {
   return (
     <Box
       w={{ base: "full", md: 60 }}
-      bg="#454545"
+      bg="black"
       position="fixed"
       overflow={"hidden"}
       overflowY={"scroll"}

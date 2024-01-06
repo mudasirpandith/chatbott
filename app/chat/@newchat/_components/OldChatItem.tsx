@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 import {
   Button,
   HStack,
@@ -25,19 +25,11 @@ interface OldChatItemProps {
   viewId: String;
 }
 export const OldChatItem = ({ content, chatId, viewId }: OldChatItemProps) => {
-  const [loading, setLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const chatdelete = async (chatId: string) => {
-    setLoading(true);
-    try {
-      await fetch("/api/chat", {
-        method: "DELETE",
-        body: JSON.stringify({ chatId }),
-      });
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
+    startTransition(() => {
+      chatdelete(chatId);
+    });
   };
 
   return (
@@ -53,10 +45,9 @@ export const OldChatItem = ({ content, chatId, viewId }: OldChatItemProps) => {
             <BsThreeDotsVertical />
           </Button>
         </PopoverTrigger>
-        <PopoverContent w={"200px"}>
+        <PopoverContent w={"100px"}>
           <PopoverArrow />
           <PopoverCloseButton />
-          <PopoverHeader color={"black"}>Wooww</PopoverHeader>
           <PopoverBody>
             <HStack>
               <a href={`/id/${viewId}`} target="_blank">
@@ -66,7 +57,7 @@ export const OldChatItem = ({ content, chatId, viewId }: OldChatItemProps) => {
               </a>
               <Spacer />
               <Button
-                isLoading={loading as boolean}
+                isLoading={isPending as boolean}
                 onClick={() => chatdelete(chatId as string)}
                 size={"sm"}
                 colorScheme="red"

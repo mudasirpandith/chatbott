@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { HStack, VStack, Image, Text } from "@chakra-ui/react";
 
@@ -23,6 +24,7 @@ export default function ChatCard({ message }: ChatCardProps) {
         }
         alt={message.role}
       />
+
       <VStack alignItems={"start"} justifyContent={"start"}>
         <Text fontWeight={"bold"} m={"0"}>
           {" "}
@@ -33,3 +35,4 @@ export default function ChatCard({ message }: ChatCardProps) {
     </HStack>
   );
 }
+// const Post = ({ mdxSource, frontmatter }) => { return (  <MDXComponents> {mdxSource} </MDXComponents> </MDXProvider> <div> <h1>{frontmatter.title}</h1> <p>{frontmatter.date}</p> </div> ); };

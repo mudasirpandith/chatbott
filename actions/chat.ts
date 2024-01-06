@@ -1,10 +1,31 @@
+"use server";
 import { getSelf } from "@/libs/auth-service";
 import { db } from "@/libs/db";
+import { revalidatePath } from "next/cache";
 
-export async function POST(req: Request, res: Response) {
+// import { GoogleGenerativeAI } from "@google/generative-ai";
+// const genAI = new GoogleGenerativeAI("AIzaSyBjGEYSCsAV-ORyzZU54j4dLpFF6RyIHhA");
+// const generationConfig = {
+//   stopSequences: ["red"],
+//   maxOutputTokens: 200,
+//   temperature: 0.9,
+//   topP: 0.1,
+//   topK: 16,
+// };
+
+// const model = genAI.getGenerativeModel({
+//   model: "gemini-pro",
+//   generationConfig,
+// });
+
+// export async function getChat(chat) {
+//   const chatai = model.startChat({
+//     history: chat,
+//   });
+// }
+export async function saveChat(role: string, parts: string, chatId: string) {
   const self = await getSelf();
-  const { chatId, role, parts } = await req.json();
-  // Check if the chat already exists
+
   try {
     const existingChat = await db.chat.findFirst({
       where: {
@@ -30,6 +51,7 @@ export async function POST(req: Request, res: Response) {
           },
         },
       });
+      revalidatePath("/chat/@newchat");
     }
     if (existingChat) {
       await db.message.create({
@@ -45,16 +67,15 @@ export async function POST(req: Request, res: Response) {
       });
     }
 
-    return new Response("", { status: 200 });
+    return;
   } catch (error) {
     console.log(error);
   }
 }
-export async function DELETE(req: Request, res: Response) {
-  const { chatId } = await req.json();
+export async function chatDelete(chatId: string) {
   try {
     await db.chat.delete({ where: { id: chatId } });
-    return new Response("Delete", { status: 202 });
+    return;
   } catch (error) {
     console.log(error);
   }

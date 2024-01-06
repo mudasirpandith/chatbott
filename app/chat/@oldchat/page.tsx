@@ -3,8 +3,9 @@ import { useEffect, useState } from "react";
 import { Box, VStack, Button, Input } from "@chakra-ui/react";
 import { FiSend } from "react-icons/fi";
 import { v4 as uuidv4 } from "uuid";
-import ChatCard from "./_components/chatCard";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { saveChat } from "@/actions/chat";
+import ChatCard from "./_components/chatCard";
 
 const Chat = () => {
   const genAI = new GoogleGenerativeAI(
@@ -40,21 +41,6 @@ const Chat = () => {
     }
   };
 
-  const addDB = async (role: string, parts: string, chatId: string) => {
-    try {
-      await fetch("/api/chat", {
-        method: "POST",
-        body: JSON.stringify({
-          role: role,
-          parts: parts,
-          chatId: chatId,
-        }),
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const handleRun = async () => {
     setLoading(true);
 
@@ -62,7 +48,7 @@ const Chat = () => {
     const newUserMessage = { role: "user", parts: prompt };
     setChat((prevChat) => [...prevChat, newUserMessage]);
     setPrompt("");
-    addDB(newUserMessage.role, newUserMessage.parts, chatId);
+    saveChat(newUserMessage.role, newUserMessage.parts, chatId);
 
     try {
       // Send user message to the model and get the response
@@ -73,7 +59,7 @@ const Chat = () => {
       // Add model response to chat
       const newModelMessage = { role: "model", parts: text };
       setChat((prevChat) => [...prevChat, newModelMessage]);
-      addDB(newModelMessage.role, newModelMessage.parts, chatId);
+      saveChat(newModelMessage.role, newModelMessage.parts, chatId);
     } catch (error) {
       console.log(error);
     } finally {

@@ -1,3 +1,4 @@
+"use client";
 import {
   Box,
   Button,
@@ -9,6 +10,7 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { FaArrowRight } from "react-icons/fa6";
+import { useAuth } from "@clerk/nextjs";
 export default function Home() {
   return (
     <Container maxW={"6xl"} p={"10px"}>
