@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, HStack, VStack, Image, Text } from "@chakra-ui/react";
+import { HStack, VStack, Image, Text } from "@chakra-ui/react";
 
 interface Message {
   content: string;
