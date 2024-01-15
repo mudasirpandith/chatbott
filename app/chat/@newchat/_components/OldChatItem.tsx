@@ -8,6 +8,7 @@ import {
   PopoverHeader,
   Spacer,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import {
   Popover,
@@ -18,6 +19,7 @@ import {
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { AiFillDelete } from "react-icons/ai";
 import { FaEye } from "react-icons/fa6";
+import { chatDelete } from "@/actions/chat";
 
 interface OldChatItemProps {
   content: string;
@@ -26,9 +28,16 @@ interface OldChatItemProps {
 }
 export const OldChatItem = ({ content, chatId, viewId }: OldChatItemProps) => {
   const [isPending, startTransition] = useTransition();
-  const chatdelete = async (chatId: string) => {
+  const toast = useToast({ position: "top" });
+  const handleDelete = async (chatId: string) => {
     startTransition(() => {
-      chatdelete(chatId);
+      chatDelete(chatId).then(() => {
+        toast({
+          title: "Chat Deleted",
+          colorScheme: "green",
+          status: "success",
+        });
+      });
     });
   };
 
@@ -58,7 +67,7 @@ export const OldChatItem = ({ content, chatId, viewId }: OldChatItemProps) => {
               <Spacer />
               <Button
                 isLoading={isPending as boolean}
-                onClick={() => chatdelete(chatId as string)}
+                onClick={() => handleDelete(chatId as string)}
                 size={"sm"}
                 colorScheme="red"
               >

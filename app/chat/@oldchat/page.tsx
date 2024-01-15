@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Box, VStack, Button, Input } from "@chakra-ui/react";
 import { FiSend } from "react-icons/fi";
 import { v4 as uuidv4 } from "uuid";
@@ -16,7 +16,7 @@ const Chat = () => {
   const [chat, setChat] = useState<Array<{ role: string; parts: string }>>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [chatId, setChatId] = useState(initialChatId);
-
+  const msgEnd = useRef<HTMLDivElement>(null);
   const generationConfig = {
     stopSequences: ["red"],
     maxOutputTokens: 200,
@@ -71,7 +71,11 @@ const Chat = () => {
     const newChatId = uuidv4();
     setChatId(newChatId);
   }, []);
-
+  useEffect(() => {
+    if (msgEnd) {
+      msgEnd?.current?.scrollIntoView();
+    }
+  }, [chat]);
   return (
     <>
       <Box ml={["0", "20px"]} zIndex={1000}>
@@ -82,12 +86,10 @@ const Chat = () => {
           justifyItems={"end"}
           h={"100%"}
         >
-          {chat
-            .slice()
-            .reverse()
-            .map((message, index) => (
-              <ChatCard key={index} message={message} />
-            ))}
+          {chat.map((message, index) => (
+            <ChatCard key={index} message={message} />
+          ))}
+          <div ref={msgEnd} />
         </VStack>
         <Box
           display="flex"

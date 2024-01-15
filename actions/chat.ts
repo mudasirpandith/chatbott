@@ -75,6 +75,7 @@ export async function saveChat(role: string, parts: string, chatId: string) {
 export async function chatDelete(chatId: string) {
   try {
     await db.chat.delete({ where: { id: chatId } });
+    revalidatePath("/chat/@newchat");
     return;
   } catch (error) {
     console.log(error);
