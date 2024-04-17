@@ -25,7 +25,7 @@ export default function Home() {
         textAlign={"center"}
       >
         <Heading fontWeight={400} fontSize={"7xl"} color={"Green"}>
-          ChatBott
+          ChatBot
         </Heading>
         <Text color={"gray"} fontWeight={"400"}>
           This advanced chatbot is created using the powerful Next.js framework
