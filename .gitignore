@@ -12,7 +12,8 @@
 # next.js
 /.next/
 /out/
-
+.vscode/*
+!.vscode/extensions.json
 # production
 /build
 
